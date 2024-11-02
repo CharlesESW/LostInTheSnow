@@ -10,6 +10,7 @@ Scene Description
 Inventory for the room to compare against user input
 List of Scenes
 
+--if you fall into a 'hole' you add a flag to the list and have to go back up the way you came (Scene will trigger the flag not the moving)
 -}
 type Description = String
 type Inventory = [String]
