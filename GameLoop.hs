@@ -10,7 +10,5 @@ import Control.Monad.State
 3.Loop
     a) User Takes Action (Set flags)
     b) Is User Dead (Set flags)
-4. Move (Set flags)
-5. Is User Dead (Set flags)
 
 -}

@@ -5,6 +5,7 @@ module Actions where
 import Gamestate.GameState
 import Scenes
 import Control.Monad.State
+import Data.List
 
 -- TODO: Change Filler Text to actual help
 actionHelp :: IO ()
@@ -110,7 +111,25 @@ actionTake input = do
     --else if not in room's inventory then liftIO invalidAction
     else put $ game {inventory = newInventory}
 
+checkUse :: String -> [String] -> [String]
+checkUse item inv = do
+    if containsValue item inv then delete item inv
+    else inv
+
+flagUse :: String -> [String] -> [String]
+flagUse item flags = do
+    if item == "knife" then flags ++ ["Oh no they did the thing they shouldn't have"]
+    else flags
+
 actionUse :: String -> StateT GameState IO ()
 actionUse input = do
     game <- get
-    
+    let initialInv = inventory game 
+    let initialFlags = flags game
+    let newInv = checkUse input initialInv
+    let newFlags = flagUse input initialFlags
+    if initialInv == newInv then do
+        liftIO $ putStrLn "You do not have that item in your inventory"
+    else do
+        liftIO $ putStrLn ("you have successfully used " ++ input)
+        put $ game {inventory = newInv, flags = newFlags}
