@@ -1,6 +1,7 @@
 module Actions where
 
 import Gamestate.GameState
+import Scenes
 import Control.Monad.State
 
 -- TODO: Change Filler Text to actual help
@@ -9,6 +10,39 @@ actionHelp = putStrLn "Filler Text"
 
 invalidAction :: IO()
 invalidAction = putStrLn "Please input a valid command."
+
+goingNorth :: Int -> AllScenes -> Int
+goingNorth loc scenes = do
+    if loc < 4 then loc
+    else loc - 4
+
+actionGo :: String -> AllScenes -> StateT GameState IO ()
+actionGo "north" scenes = do
+    game <- get
+    let place = scene game
+    let newPlace = goingNorth place scenes
+    if place == newPlace then liftIO $ putStrLn "You are not able to travel north"
+    else liftIO $ putStrLn "You have travelled north"
+    put $ game { scene = newPlace }
+actionGo "south" scenes = do
+    game <- get
+    let place = scene game + 4
+    liftIO $ putStrLn "You have travelled south"
+    put $ game { scene = place }
+actionGo "east" scenes = do
+    game <- get
+    let place = scene game + 1
+    liftIO $ putStrLn "You have travelled east"
+    put $ game { scene = place }
+actionGo "west" scenes = do
+    game <- get
+    let place = scene game - 1
+    liftIO $ putStrLn "You have travelled west"
+    put $ game { scene = place }
+actionGo _ _ = do
+    game <- get
+    liftIO invalidAction
+    put game
 
 
 
