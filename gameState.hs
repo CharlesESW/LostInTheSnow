@@ -1,4 +1,4 @@
-module State where
+module GameState where
 
 import           Control.Monad.State
 
@@ -10,10 +10,10 @@ runState :: State s a -> s -> (a, s)
 
 -}
 data GameState = GameState 
-{ scene :: SceneIndex
-, flags :: Flags
-, inventory :: Inventory 
-}
+    { scene :: SceneIndex
+    , flags :: Flags
+    , inventory :: Inventory 
+    }
 
 data Inventory = Inventory [String] deriving (Show, Eq)
 type SceneIndex = Int
