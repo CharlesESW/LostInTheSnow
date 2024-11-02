@@ -27,7 +27,8 @@ goingSouth loc scenes = do
 
 goingEast :: Int -> AllScenes -> Int
 goingEast loc scenes = do
-    if loc `mod` 4 == 3 then loc
+    if loc == 11 then 16
+    else if loc `mod` 4 == 3 then loc
     else if fst(scenes!!(loc + 1)) == "NULL" then loc
     else loc + 1
 
