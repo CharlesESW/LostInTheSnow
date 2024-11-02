@@ -9,7 +9,7 @@ Immediate Death ends the game
 3 Flags ends the game
 Reaching the end ends the game
 
-Successful end means not triggering moralGameOver
+Alive end means not triggering moralGameOver
 
 --need add flag function when a flag is triggered
 EXTRA--could remove flags if find and use healing supplies
@@ -21,7 +21,7 @@ containsValue x (y:ys)
     | x == y = True
     | otherwise = containsValue x ys
 
---if bunny is killed, then reaching the end is still a failure
+--if bunny is killed, then reaching the end will kill player
 failedEndBool :: State GameState Bool
 failedEndBool = do
     game <- get
