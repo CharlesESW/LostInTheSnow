@@ -40,16 +40,14 @@ actionShow input = do
     else if input == "scene" then liftIO $ print (scene game)
     else liftIO invalidAction
 
-append :: String -> [String] -> [String]
-append a = foldr (:) [a]
-
 --check that String isnt already in Inventory
 --add to Inventory
 actionTake :: String -> StateT GameState IO ()
 actionTake input = do
     game <- get
     let currentInventory = inventory game
-    let newInventory = append input currentInventory
+    let newInventory = currentInventory ++ [input]
     let duplicateBool = containsValue input currentInventory
     if duplicateBool then liftIO invalidAction
+    --else if not in room's inventory then liftIO invalidAction
     else put $ game {inventory = newInventory}

@@ -12,11 +12,7 @@ runState :: State s a -> s -> (a, s)
 -}
 
 data GameState = GameState 
-    { scene :: SceneIndex
-    , flags :: Flags
-    , inventory :: Inventory
+    { scene :: Int
+    , flags :: [String]
+    , inventory :: [String]
     }
-
-newtype Inventory = Inventory [String] deriving (Show, Eq)
-type SceneIndex = Int
-newtype Flags = Flags [String] deriving (Show, Eq)

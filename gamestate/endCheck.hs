@@ -31,5 +31,3 @@ flagGameOver = do
     gameState <- get
     let flagDeath = flags gameState
     if length flagDeath >=3 then return True else return False
-
-    
