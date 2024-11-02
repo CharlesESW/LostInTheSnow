@@ -78,11 +78,7 @@ actionGo _ _ = do
 
 actionUse :: String -> GameState GameState ()
 
-actionOpen :: String -> GameState GameState () --needed??
-
-actionLook :: String -> GameState GameState () --unnecessary with Show
-
-actionTake :: String -> GameState GameState ()
+actionOpen :: String -> GameState GameState () --extra for later
 -}
 
 containsValue :: (Eq v) => v -> [v] -> Bool
@@ -113,3 +109,8 @@ actionTake input = do
     if duplicateBool then liftIO invalidAction
     --else if not in room's inventory then liftIO invalidAction
     else put $ game {inventory = newInventory}
+
+actionUse :: String -> StateT GameState IO ()
+actionUse input = do
+    game <- get
+    
