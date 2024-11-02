@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Redundant if" #-}
 module Actions where
 
 import Gamestate.GameState
@@ -14,7 +16,26 @@ invalidAction = putStrLn "Please input a valid command."
 goingNorth :: Int -> AllScenes -> Int
 goingNorth loc scenes = do
     if loc < 4 then loc
-    else loc - 4
+    else if fst(scenes!!(loc - 4)) == "NULL" then loc
+    else loc - 4 
+
+goingSouth :: Int -> AllScenes -> Int
+goingSouth loc scenes = do
+    if loc > 11 then loc
+    else if fst(scenes!!(loc + 4)) == "NULL" then loc
+    else loc + 4 
+
+goingEast :: Int -> AllScenes -> Int
+goingEast loc scenes = do
+    if loc `mod` 4 == 3 then loc
+    else if fst(scenes!!(loc + 1)) == "NULL" then loc
+    else loc + 1
+
+goingWest :: Int -> AllScenes -> Int
+goingWest loc scenes = do
+    if loc `mod` 4 == 0 then loc
+    else if fst(scenes!!(loc - 1)) == "NULL" then loc
+    else loc - 1 
 
 actionGo :: String -> AllScenes -> StateT GameState IO ()
 actionGo "north" scenes = do
@@ -26,18 +47,24 @@ actionGo "north" scenes = do
     put $ game { scene = newPlace }
 actionGo "south" scenes = do
     game <- get
-    let place = scene game + 4
-    liftIO $ putStrLn "You have travelled south"
-    put $ game { scene = place }
+    let place = scene game
+    let newPlace = goingSouth place scenes
+    if place == newPlace then liftIO $ putStrLn "You are not able to travel south"
+    else liftIO $ putStrLn "You have travelled south"
+    put $ game { scene = newPlace }
 actionGo "east" scenes = do
     game <- get
-    let place = scene game + 1
-    liftIO $ putStrLn "You have travelled east"
-    put $ game { scene = place }
+    let place = scene game
+    let newPlace = goingEast place scenes
+    if place == newPlace then liftIO $ putStrLn "You are not able to travel east"
+    else liftIO $ putStrLn "You have travelled east"
+    put $ game { scene = newPlace }
 actionGo "west" scenes = do
     game <- get
-    let place = scene game - 1
-    liftIO $ putStrLn "You have travelled west"
+    let place = scene game
+    let newPlace = goingWest place scenes
+    if place == newPlace then liftIO $ putStrLn "you are not able to travel wast"
+    else liftIO $ putStrLn "You have travelled west"
     put $ game { scene = place }
 actionGo _ _ = do
     game <- get
