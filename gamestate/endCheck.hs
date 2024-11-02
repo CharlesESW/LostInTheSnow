@@ -4,8 +4,8 @@
 containsValue :: (Eq v) => v -> [v] -> Bool
 containsValue _ [] = False
 containsValue x (y:ys)
-| x == y = True
-| otherwise = containsValue x ys
+    | x == y = True
+    | otherwise = containsValue x ys
 
 isEndRoom :: State GameState Bool
 isEndRoom = do
