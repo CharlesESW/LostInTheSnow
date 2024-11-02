@@ -6,6 +6,7 @@ import Control.Monad.State
 {-
 
 Immediate Death ends the game
+--immediate death means to add 3 flags to flaglist then trigger flagGameOver but has different end message
 3 Flags ends the game
 Reaching the end ends the game
 
