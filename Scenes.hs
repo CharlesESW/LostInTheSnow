@@ -15,6 +15,8 @@ List of Scenes
 type Description = String
 type Inventory = [String]
 
+
+--Scene flags will only affect the scene whilst in it, will reset upon departure
 type Scene = (Description, Inventory)
 
 type AllScenes = [Scene]

@@ -17,27 +17,27 @@ invalidAction = putStrLn "Please input a valid command."
 goingNorth :: Int -> AllScenes -> Int
 goingNorth loc scenes = do
     if loc < 4 then loc
-    else if fst(scenes!!(loc - 4)) == "NULL" then loc
-    else loc - 4 
+    else if fst (scenes!!(loc - 4)) == "NULL" then loc
+    else loc - 4
 
 goingSouth :: Int -> AllScenes -> Int
 goingSouth loc scenes = do
     if loc > 11 then loc
-    else if fst(scenes!!(loc + 4)) == "NULL" then loc
-    else loc + 4 
+    else if fst (scenes!!(loc + 4)) == "NULL" then loc
+    else loc + 4
 
 goingEast :: Int -> AllScenes -> Int
 goingEast loc scenes = do
     if loc == 11 then 16
     else if loc `mod` 4 == 3 then loc
-    else if fst(scenes!!(loc + 1)) == "NULL" then loc
+    else if fst (scenes!!(loc + 1)) == "NULL" then loc
     else loc + 1
 
 goingWest :: Int -> AllScenes -> Int
 goingWest loc scenes = do
     if loc `mod` 4 == 0 then loc
-    else if fst(scenes!!(loc - 1)) == "NULL" then loc
-    else loc - 1 
+    else if fst (scenes!!(loc - 1)) == "NULL" then loc
+    else loc - 1
 
 actionGo :: String -> AllScenes -> StateT GameState IO ()
 actionGo "north" scenes = do
@@ -88,24 +88,25 @@ containsValue x (y:ys)
     | x == y = True
     | otherwise = containsValue x ys
 
- --TODO: Get it to actually print the states
+--print scene description or inventory
 actionShow :: String -> AllScenes -> StateT GameState IO ()
 actionShow input as = do
     game <- get
     if input == "inventory" then liftIO $ print (inventory game)
-    else if input == "scene" then liftIO $ print (fst(as!!scene game))
+    else if input == "scene" then liftIO $ print (fst (as!!scene game))
     else liftIO invalidAction
 
---check that String isnt already in Inventory
 --add to Inventory
---TODO Check if inventory call is in scene's inventory
 actionTake :: String -> AllScenes -> StateT GameState IO ()
 actionTake input s = do
     game <- get
     let currentInventory = inventory game
     let newInventory = currentInventory ++ [input]
     let duplicateBool = containsValue input currentInventory
+    let roomInventory = snd (s!!scene game)
+    let validTake = containsValue input roomInventory
     if duplicateBool then liftIO invalidAction
+    else if not validTake then liftIO invalidAction
     --else if not in room's inventory then liftIO invalidAction
     else put $ game {inventory = newInventory}
 
@@ -122,7 +123,7 @@ flagUse item flags = do
 actionUse :: String -> StateT GameState IO ()
 actionUse input = do
     game <- get
-    let initialInv = inventory game 
+    let initialInv = inventory game
     let initialFlags = flags game
     let newInv = checkUse input initialInv
     let newFlags = flagUse input initialFlags
