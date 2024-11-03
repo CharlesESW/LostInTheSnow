@@ -237,6 +237,9 @@ actionUse input = do
     else if input == "letter" then do
         liftIO $ putStrLn "you open a heartfelt letter addressed to who you now remember is your best friends' son. he expresses his love and sorrow that he may not return home, he fears that a member of his team is after his life. you are glad to have retrieved the letter."
         put $ game {inventory = newInv, flags = newFlags}
+    else if input == "camera" then do
+        liftIO $ putStrLn "the camera shows you pictures of you and another in the mountains. you both look happy. looking at these is making your head hurt, it's time to put it down."
+        put $ game {inventory = newInv, flags = newFlags}
     else do
-        liftIO $ putStrLn ("you have successfully used " ++ input)
+        liftIO $ putStrLn ("you have used " ++ input)
         put $ game {inventory = newInv, flags = newFlags}
