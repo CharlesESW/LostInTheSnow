@@ -44,30 +44,106 @@ actionGo "north" scenes = do
     game <- get
     let place = scene game
     let newPlace = goingNorth place scenes
-    if place == newPlace then liftIO $ putStrLn "You are not able to travel north"
-    else liftIO $ putStrLn "You have travelled north"
-    put $ game { scene = newPlace }
+    let f = flags game
+    if place == newPlace then do
+        liftIO $ putStrLn "You are not able to travel north"
+        put $ game {scene = newPlace}
+    else if place == 5 then do
+        liftIO $ putStrLn "You were killed by a Yeti"
+        put $ game {scene = newPlace, flags = ["1", "2", "3"]}
+    else if place == 8 then do
+        liftIO $ putStrLn "You were struck by lightning"
+        put $ game {scene = newPlace, flags = ["1", "2", "3"]}
+    else if place == 11 then do
+        liftIO $ putStrLn "There was a rockfall that caused you to get stranded, you slowly starve to death"
+        put $ game {scene = newPlace, flags = ["1", "2", "3"]}
+    else if place == 10 then do
+        liftIO $ putStrLn "You fell into a pit, but managed to get back out only taking a little damage"
+        put $ game {scene = place, flags = f ++ ["fellinpit"]}
+    else if place == 13 && notElem "coat" f then do
+        liftIO $ putStrLn "it is very cold and you get hypothermia"
+        put $ game {scene = newPlace, flags = f ++["cold"]}
+    else do
+        liftIO $ putStrLn "You have travelled north"
+        put $ game { scene = newPlace }
 actionGo "south" scenes = do
     game <- get
     let place = scene game
+    let f = flags game
     let newPlace = goingSouth place scenes
-    if place == newPlace then liftIO $ putStrLn "You are not able to travel south"
-    else liftIO $ putStrLn "You have travelled south"
-    put $ game { scene = newPlace }
+    if place == newPlace then do
+        liftIO $ putStrLn "You are not able to travel south"
+        put $ game { scene = newPlace }
+    else if place == 1 then do
+        liftIO $ putStrLn "You were killed by a Yeti"
+        put $ game {scene = newPlace, flags = ["1", "2", "3"]}
+    else if place == 4 then do
+        liftIO $ putStrLn "You were struck by lightning"
+        put $ game {scene = newPlace, flags = ["1", "2", "3"]}
+    else if place == 7 then do
+        liftIO $ putStrLn "There was a rockfall that caused you to get stranded, you slowly starve to death"
+        put $ game {scene = newPlace, flags = ["1", "2", "3"]}
+    else if place == 2 then do
+        liftIO $ putStrLn "You fell into a pit, but managed to get back out only taking a little damage"
+        put $ game {scene = place, flags = f ++ ["fellinpit"]}
+    else if place == 8 then do
+        liftIO $ putStrLn "There was an avalanche which you narrowly escaped"
+        put $ game {scene = place, flags = f ++ ["avalanche"]}
+    else if place == 5 && notElem "coat" f then do
+        liftIO $ putStrLn "it is very cold and you get hypothermia"
+        put $ game {scene = newPlace, flags = f ++["cold"]}
+    else if place == 11 then do
+        liftIO $ putStrLn "You have fallen in, you don't know how long you will last"
+        put $ game {scene = newPlace, flags = f ++ ["illness"]}
+    else do
+        liftIO $ putStrLn "You have travelled south"
+        put $ game { scene = newPlace }
 actionGo "east" scenes = do
     game <- get
     let place = scene game
     let newPlace = goingEast place scenes
-    if place == newPlace then liftIO $ putStrLn "You are not able to travel east"
-    else liftIO $ putStrLn "You have travelled east"
-    put $ game { scene = newPlace }
+    let f = flags game
+    if place == newPlace then do
+        liftIO $ putStrLn "You are not able to travel east"
+        put $ game { scene = newPlace }
+    else if place == 10 then do
+        liftIO $ putStrLn "There was a rockfall that caused you to get stranded, you slowly starve to death"
+        put $ game {scene = newPlace, flags = ["1", "2", "3"]}
+    else if place == 5 then do
+        liftIO $ putStrLn "You fell into a pit, but managed to get back out only taking a little damage"
+        put $ game {scene = place, flags = f ++ ["fellinpit"]}
+    else if place == 14 then do
+        liftIO $ putStrLn "You have fallen ill, you don't know how long you will last"
+        put $ game {scene = newPlace, flags = f ++ ["sickness"]}
+    else if place == 8 && notElem "coat" f then do
+        liftIO $ putStrLn "it is very cold and you get hypothermia"
+        put $ game {scene = newPlace, flags = f ++["cold"]}
+    else do
+        liftIO $ putStrLn "You have travelled east"
+        put $ game { scene = newPlace }
 actionGo "west" scenes = do
     game <- get
     let place = scene game
     let newPlace = goingWest place scenes
-    if place == newPlace then liftIO $ putStrLn "you are not able to travel wast"
-    else liftIO $ putStrLn "You have travelled west"
-    put $ game { scene = newPlace }
+    let f = flags game
+    if place == newPlace then do
+        liftIO $ putStrLn "you are not able to travel wast"
+        put $ game { scene = newPlace }
+    else if place == 11 then do
+        liftIO $ putStrLn "There was a rockfall that caused you to get stranded, you slowly starve to death"
+        put $ game {scene = newPlace, flags = ["1", "2", "3"]}
+    else if place == 7 then do
+        liftIO $ putStrLn "You fell into a pit, but managed to get back out only taking a little damage"
+        put $ game {scene = place, flags = f ++ ["fellinpit"]}
+    else if place == 13 then do
+        liftIO $ putStrLn "There was an avalanche which you narrowly escaped"
+        put $ game {scene = place, flags = f ++ ["avalanche"]}
+    else if place == 10 && notElem "coat" f then do
+        liftIO $ putStrLn "it is very cold and you get hypothermia"
+        put $ game {scene = newPlace, flags = f ++["cold"]}
+    else do
+        liftIO $ putStrLn "You have travelled west"
+        put $ game { scene = newPlace }
 actionGo _ _ = do
     game <- get
     liftIO invalidAction
