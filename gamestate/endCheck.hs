@@ -1,4 +1,4 @@
-module EndCheck where
+module GameState.EndCheck where
 
 import Gamestate.GameState
 import Control.Monad.State
@@ -23,6 +23,7 @@ containsValue x (y:ys)
     | otherwise = containsValue x ys
 
 --if bunny is killed, then reaching the end will kill player
+--True==Failed
 failedEndBool :: State GameState Bool
 failedEndBool = do
     game <- get
