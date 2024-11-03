@@ -46,14 +46,24 @@ actions s str = do
 actionsLoop :: AllScenes -> String -> StateT GameState IO ()
 actionsLoop s str = do
     -- Call action and check if user is dead
+    game <- get
+    let firstPos = scene game
     actions s str
     deadBool <- flagGameOver
+    game <- get
+    let secondPos = scene game
+
     if deadBool
         then do
             liftIO $ putStrLn "WASTED."
             liftIO exitSuccess
-        else if head (userCut str) /= "go"
-            then do
+    else if head (userCut str) /= "go"
+        then do
+            liftIO $ putStrLn ">>"
+            userInput <- liftIO getLine
+            actionsLoop s userInput
+        else 
+            if firstPos == secondPos then do
                 liftIO $ putStrLn ">>"
                 userInput <- liftIO getLine
                 actionsLoop s userInput

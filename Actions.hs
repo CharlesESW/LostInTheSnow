@@ -54,7 +54,7 @@ actionGo "north" scenes = do
         liftIO $ putStrLn "awareness is key! rockfall has now stranded you, slowly starving you to death."
         put $ game {scene = newPlace, flags = ["1", "2", "3"]}
     else if place == 10 then do
-        liftIO $ putStrLn "you fell into a pit, but managed to get back out only taking a little damage."
+        liftIO $ putStrLn "you fell into a pit, but managed to get back out to where you were before and only took a little damage."
         put $ game {scene = place, flags = f ++ ["fellinpit"]}
     else if place == 13 then 
         if elem "coat" f then do
@@ -84,10 +84,10 @@ actionGo "south" scenes = do
         liftIO $ putStrLn "awareness is key! rockfall has now stranded you, slowly starving you to death."
         put $ game {scene = newPlace, flags = ["1", "2", "3"]}
     else if place == 2 then do
-        liftIO $ putStrLn "you fell into a pit, but managed to get back out only taking a little damage."
+        liftIO $ putStrLn "you fell into a pit, but managed to get back out to where you were before and only took a little damage."
         put $ game {scene = place, flags = f ++ ["fellinpit"]}
     else if place == 8 then do
-        liftIO $ putStrLn "near miss! you almost got caught in an avalanche, winding you. the dangers of the mountains must be making you anxious."
+        liftIO $ putStrLn "near miss! you almost got caught in an avalanche, winding you. you managed to get back to where you were before but the dangers of the mountains must be making you anxious."
         put $ game {scene = place, flags = f ++ ["avalanche"]}
     else if place == 5 then 
         if elem "coat" f then do
@@ -114,7 +114,7 @@ actionGo "east" scenes = do
         liftIO $ putStrLn "awareness is key! rockfall has now stranded you, slowly starving you to death."
         put $ game {scene = newPlace, flags = ["1", "2", "3"]}
     else if place == 5 then do
-        liftIO $ putStrLn "you fell into a pit, but managed to get back out only taking a little damage."
+        liftIO $ putStrLn "you fell into a pit, but managed to get back out to where you were before and only took a little damage."
         put $ game {scene = place, flags = f ++ ["fellinpit"]}
     else if place == 14 then do
         liftIO $ putStrLn "illness has befallen you; you may not last very long.."
@@ -141,10 +141,10 @@ actionGo "west" scenes = do
         liftIO $ putStrLn "awareness is key! rockfall has now stranded you, slowly starving you to death."
         put $ game {scene = newPlace, flags = ["1", "2", "3"]}
     else if place == 7 then do
-        liftIO $ putStrLn "you fell into a pit, but managed to get back out only taking a little damage."
+        liftIO $ putStrLn "you fell into a pit, but managed to get back out to where you were before and only took a little damage."
         put $ game {scene = place, flags = f ++ ["fellinpit"]}
     else if place == 13 then do
-        liftIO $ putStrLn "near miss! you almost got caught in an avalanche, winding you. the dangers of the mountains must be making you anxious."
+        liftIO $ putStrLn "near miss! you almost got caught in an avalanche, winding you. you managed to get back to where you were before but the dangers of the mountains must be making you anxious."
         put $ game {scene = place, flags = f ++ ["avalanche"]}
     else if place == 10 then 
         if elem "coat" f then do
@@ -198,7 +198,7 @@ actionTake input s = do
     let validTake = containsValue input roomInventory
     if duplicateBool then liftIO invalidAction
     else if not validTake then liftIO invalidAction
-    else if length currentInventory ==4 then liftIO $ putStrLn "inventory is full" --inventory is full
+    else if length currentInventory ==2 then liftIO $ putStrLn "inventory is full" --inventory is full
     else if input == "letter" && elem "set" currentInventory then liftIO invalidAction
     else if input == "set" && elem "letter" currentInventory then liftIO invalidAction
     else do
