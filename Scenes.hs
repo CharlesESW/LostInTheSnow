@@ -38,4 +38,3 @@ getMap = [("you open your eyes to a cold white landscape, lying down with a hat 
     ("fifteenth",[]), 
     ("sixteenth",[]), 
     ("Leaving the mountain must be such a relief, congratulations on your survival thusfar. Unfortunately it is still unknown how you even ended up here; and just what did happen to your friend...",[])]
-    --- TODO: if you take the letter then secrets are revealed, else your friend has gone mad and is hunting you down to kill you.
