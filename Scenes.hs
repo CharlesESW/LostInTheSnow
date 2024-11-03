@@ -18,3 +18,22 @@ type Inventory = [String]
 type Scene = (Description, Inventory)
 
 type AllScenes = [Scene]
+
+getMap :: [(String, [String])]
+getMap = [("first", ["things"]), 
+    ("second",[]), 
+    ("third",[]), 
+    ("fourth",[]), 
+    ("fifth",[]), 
+    ("sixth",[]), 
+    ("seventh",[]), 
+    ("eigth",[]), 
+    ("ninth",[]), 
+    ("tenth",[]), 
+    ("eleventh",[]), 
+    ("twelve",[]), 
+    ("thirteenth",[]), 
+    ("fourteenth",[]), 
+    ("fifteenth",[]), 
+    ("sixteenth",[]), 
+    ("winner",[])]

@@ -67,7 +67,7 @@ actionGo "west" scenes = do
     let newPlace = goingWest place scenes
     if place == newPlace then liftIO $ putStrLn "you are not able to travel wast"
     else liftIO $ putStrLn "You have travelled west"
-    put $ game { scene = place }
+    put $ game { scene = newPlace }
 actionGo _ _ = do
     game <- get
     liftIO invalidAction

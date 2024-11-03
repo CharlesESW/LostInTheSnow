@@ -20,7 +20,7 @@ main :: IO ()
 main = do
     putStrLn "Start stuff"
     let initialGameState = GameState { scene = 0, flags = [], inventory = [] }
-    evalStateT (narrativeLoop [("first", []), ("second",[])]) initialGameState
+    evalStateT (narrativeLoop Scenes.getMap) initialGameState
 
 -- Utility to split user input into words
 userCut :: String -> [String]
