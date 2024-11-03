@@ -19,7 +19,7 @@ import System.Exit (exitSuccess)
 main :: IO ()
 main = do
     putStrLn "Start stuff"
-    let initialGameState = GameState { scene = 0, flags = [], inventory = [] }
+    let initialGameState = GameState { scene = 0, flags = ["bunny"], inventory = [] }
     evalStateT (narrativeLoop Scenes.getMap) initialGameState
 
 -- Utility to split user input into words

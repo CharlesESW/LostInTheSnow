@@ -7,6 +7,8 @@ import Scenes
 import Control.Monad.State
 import Data.List
 
+--TODO: Add flags to actions
+
 -- TODO: Change Filler Text to actual help
 actionHelp :: IO ()
 actionHelp = putStrLn "Filler Text"
@@ -183,7 +185,9 @@ actionTake input s = do
     let validTake = containsValue input roomInventory
     if duplicateBool then liftIO invalidAction
     else if not validTake then liftIO invalidAction
-    --else if not in room's inventory then liftIO invalidAction
+    else if length currentInventory ==4 then liftIO invalidAction --inventory is full
+    else if input == "letter" && elem "set" currentInventory then liftIO invalidAction
+    else if input == "set" && elem "letter" currentInventory then liftIO invalidAction
     else put $ game {inventory = newInventory}
 
 checkUse :: String -> [String] -> [String]
@@ -193,7 +197,10 @@ checkUse item inv = do
 
 flagUse :: String -> [String] -> [String]
 flagUse item flags = do
-    if item == "knife" then flags ++ ["Oh no they did the thing they shouldn't have"]
+    --if user is 'cold' and uses 'matches' then remove 'cold' flag
+    if item == "matches" then checkUse "cold" flags
+    else if item == "jerky" then checkUse "sickness" flags
+    else if item == "letter" then checkUse "bunny" flags
     else flags
 
 actionUse :: String -> StateT GameState IO ()
@@ -205,6 +212,9 @@ actionUse input = do
     let newFlags = flagUse input initialFlags
     if initialInv == newInv then do
         liftIO $ putStrLn "You do not have that item in your inventory"
+    else if input == "letter" then do
+        liftIO $ putStrLn "You open a heartfelt letter addressed to who you now remember is your best friends' son. He expresses his love and sorrow that he may not return home. You are glad to have retrieved the letter."
+        put $ game {inventory = newInv, flags = newFlags}
     else do
         liftIO $ putStrLn ("you have successfully used " ++ input)
         put $ game {inventory = newInv, flags = newFlags}
