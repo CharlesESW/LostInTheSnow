@@ -16,5 +16,3 @@ data GameState = GameState
     , flags :: [String]
     , inventory :: [String]
     }
-
-    --EXTRA: Useless items that fill up limited inventory space - Resource managememt

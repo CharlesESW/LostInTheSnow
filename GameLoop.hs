@@ -18,7 +18,9 @@ import System.Exit (exitSuccess)
 
 main :: IO ()
 main = do
-    putStrLn "Start stuff"
+    putStrLn "LOST IN THE SNOW"
+    putStrLn "Survival Adventure Game from the minds behind ___"
+    putStrLn "enter the `help` command any time"
     let initialGameState = GameState { scene = 0, flags = ["bunny"], inventory = [] }
     evalStateT (narrativeLoop Scenes.getMap) initialGameState
 
@@ -48,11 +50,11 @@ actionsLoop s str = do
     deadBool <- flagGameOver
     if deadBool
         then do
-            liftIO $ putStrLn "You have died."
+            liftIO $ putStrLn "WASTED."
             liftIO exitSuccess
         else if head (userCut str) /= "go"
             then do
-                liftIO $ putStrLn "Enter your next action:"
+                liftIO $ putStrLn ">>"
                 userInput <- liftIO getLine
                 actionsLoop s userInput
             else return ()
@@ -66,7 +68,7 @@ narrativeLoop s = do
     liftIO $ putStrLn (fst (s !! sceneInt))
     
     -- Read user action
-    liftIO $ putStrLn "Enter your action:"
+    liftIO $ putStrLn ">>"
     userInput <- liftIO getLine
     actionsLoop s userInput
 
@@ -74,8 +76,8 @@ narrativeLoop s = do
     ending <- isEndRoom
     failedEnd <- failedEndBool
     if ending && failedEnd
-        then liftIO $ putStrLn "Unfortunately, you have been murdered by the bunny's mother. She has been hunting you for your entire journey."
+        then liftIO $ putStrLn "Reaching civilisation has never felt better. Well, it would feel better if you hadn't just been stabbed in the back. If only you had read the letter, it may have warned you of your friend's paranoia..."
     else if ending
-        then liftIO $ putStrLn "Congratulations, you have escaped the Snowy Hellscape!"
+        then liftIO $ putStrLn "Returning to civilisation quickly brings back memories of your friend; his letter a sign he may still be trapped up the mountains. Search and rescue is notified and you are treated to a nice hot meal whilst you remain hopeful of their return."
     else
         narrativeLoop s  -- Continue the narrative loop if not at the end
