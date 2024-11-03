@@ -6,6 +6,7 @@ import Gamestate.GameState
 import Scenes
 import Control.Monad.State
 import Data.List
+import System.Process
 
 actionHelp :: IO ()
 actionHelp = putStrLn "--help \n\nthe aim of the game is to escape from the mountain you have found yourself upon\nthis game operates entirely in lapslock, using uppercase will not work \nthe commands are `go [nesw]`, `show [inventory/scene]`, `take [item]` and `use [item]`\n\nplease use your best survival skills to avoid flags and save yourself - remember actions do have consequences!"
@@ -71,6 +72,7 @@ actionGo "north" scenes = do
             put $ game {scene = place, flags = f ++ ["fellinpit"]}
     else if place == 13 then
         if "coat" `elem` f then do
+            liftIO $ system "cls"
             liftIO $ putStrLn "it is very cold but luckily you wore your trusty coat and were ok"
             put $ game {scene = newPlace}
         else do
@@ -78,13 +80,15 @@ actionGo "north" scenes = do
                 liftIO $ putStrLn "it is very cold so you get hypothermia, combined with your previous blunders, you can't survive any longer."
                 put $ game {scene = place, flags = f ++ ["cold"]}
             else do
+                liftIO $ system "cls"
                 liftIO $ putStrLn "it is very cold so you get hypothermia, were you not warned?"
                 put $ game {scene = newPlace, flags = f ++["cold"]}
     else if place == newPlace then do
         liftIO $ putStrLn "you cannot follow this path."
         put $ game {scene = newPlace}
     else do
-        liftIO $ putStrLn "traversing north..."
+        liftIO $ system "cls"
+        liftIO $ putStrLn "traversed north..."
         put $ game { scene = newPlace }
 actionGo "south" scenes = do
     game <- get
@@ -116,6 +120,7 @@ actionGo "south" scenes = do
             put $ game {scene = place, flags = f ++ ["avalanche"]}
     else if place == 5 then
         if "coat" `elem` f then do
+            liftIO $ system "cls"
             liftIO $ putStrLn "it is very cold but luckily you wore your trusty coat and were ok"
             put $ game {scene = newPlace}
         else do
@@ -123,16 +128,19 @@ actionGo "south" scenes = do
                 liftIO $ putStrLn "it is very cold so you get hypothermia, combined with your previous blunders, you can't survive any longer."
                 put $ game {scene = place, flags = f ++ ["cold"]}
             else do
+                liftIO $ system "cls"
                 liftIO $ putStrLn "it is very cold so you get hypothermia, were you not warned?"
                 put $ game {scene = newPlace, flags = f ++["cold"]}
     else if place == 11 then do
+        liftIO $ system "cls"
         liftIO $ putStrLn "illness has befallen you; you may not last very long.."
         put $ game {scene = newPlace, flags = f ++ ["illness"]}
     else if place == newPlace then do
         liftIO $ putStrLn "you cannot follow this path."
         put $ game {scene = newPlace}
     else do
-        liftIO $ putStrLn "traversing south..."
+        liftIO $ system "cls"
+        liftIO $ putStrLn "traversed south..."
         put $ game { scene = newPlace }
 actionGo "east" scenes = do
     game <- get
@@ -150,10 +158,12 @@ actionGo "east" scenes = do
             liftIO $ putStrLn "you fell into a pit, but managed to get back out to where you were before and only took a little damage."
             put $ game {scene = place, flags = f ++ ["fellinpit"]}
     else if place == 14 then do
+        liftIO $ system "cls"
         liftIO $ putStrLn "illness has befallen you; you may not last very long.."
         put $ game {scene = newPlace, flags = f ++ ["sickness"]}
     else if place == 8 then
         if "coat" `elem` f then do
+            liftIO $ system "cls"
             liftIO $ putStrLn "it is very cold but luckily you wore your trusty coat and were ok"
             put $ game {scene = newPlace}
         else do
@@ -161,13 +171,15 @@ actionGo "east" scenes = do
                 liftIO $ putStrLn "it is very cold so you get hypothermia, combined with your previous blunders, you can't survive any longer."
                 put $ game {scene = place, flags = f ++ ["cold"]}
             else do
+                liftIO $ system "cls"
                 liftIO $ putStrLn "it is very cold so you get hypothermia, were you not warned?"
                 put $ game {scene = newPlace, flags = f ++["cold"]}
     else if place == newPlace then do
         liftIO $ putStrLn "you cannot follow this path."
         put $ game {scene = newPlace}
     else do
-        liftIO $ putStrLn "traversing east..."
+        liftIO $ system "cls"
+        liftIO $ putStrLn "traversed east..."
         put $ game { scene = newPlace }
 actionGo "west" scenes = do
     game <- get
@@ -193,6 +205,7 @@ actionGo "west" scenes = do
             put $ game {scene = place, flags = f ++ ["avalanche"]}
     else if place == 10 then
         if "coat" `elem` f then do
+            liftIO $ system "cls"
             liftIO $ putStrLn "it is very cold but luckily you wore your trusty coat and were ok"
             put $ game {scene = newPlace}
         else do
@@ -200,13 +213,15 @@ actionGo "west" scenes = do
                 liftIO $ putStrLn "it is very cold so you get hypothermia, combined with your previous blunders, you can't survive any longer."
                 put $ game {scene = place, flags = f ++ ["cold"]}
             else do
+                liftIO $ system "cls"
                 liftIO $ putStrLn "it is very cold so you get hypothermia, were you not warned?"
                 put $ game {scene = newPlace, flags = f ++["cold"]}
     else if place == newPlace then do
         liftIO $ putStrLn "you cannot follow this path."
         put $ game {scene = newPlace}
     else do
-        liftIO $ putStrLn "traversing west..."
+        liftIO $ system "cls"
+        liftIO $ putStrLn "traversed west..."
         put $ game { scene = newPlace }
 actionGo _ _ = do
     game <- get
