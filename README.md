@@ -15,11 +15,11 @@ This game operates entirely in lapslock, using uppercase will not work.
 
 ### Commands
 
-`go [north/east/south/west]`
-`show [inventory/scene]`
-`take [item]`
-`use [item]`
-`help`
+- `go [north/east/south/west]`
+- `show [inventory/scene]`
+- `take [item]`
+- `use [item]`
+- `help`
 
 ## ToDos
 
