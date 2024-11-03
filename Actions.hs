@@ -89,20 +89,18 @@ containsValue x (y:ys)
     | otherwise = containsValue x ys
 
  --TODO: Get it to actually print the states
-actionShow :: String -> StateT GameState IO ()
-actionShow input = do
+actionShow :: String -> AllScenes -> StateT GameState IO ()
+actionShow input as = do
     game <- get
-    let i = inventory
-    let s = scene
-
     if input == "inventory" then liftIO $ print (inventory game)
-    else if input == "scene" then liftIO $ print (scene game)
+    else if input == "scene" then liftIO $ print (fst(as!!scene game))
     else liftIO invalidAction
 
 --check that String isnt already in Inventory
 --add to Inventory
-actionTake :: String -> StateT GameState IO ()
-actionTake input = do
+--TODO Check if inventory call is in scene's inventory
+actionTake :: String -> AllScenes -> StateT GameState IO ()
+actionTake input s = do
     game <- get
     let currentInventory = inventory game
     let newInventory = currentInventory ++ [input]

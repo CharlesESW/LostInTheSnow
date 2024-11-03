@@ -24,6 +24,7 @@ main = do
     --do ending out of loop
     print "placeholder"
 
+{-
 wordsWhen     :: (Char -> Bool) -> String -> [String]
 wordsWhen p s =  case dropWhile p s of
                     "" -> []
@@ -35,32 +36,42 @@ userCut :: String -> [String]
 userCut str = do
     let strlst = wordsWhen (==' ') str
     return strlst
+-}
+
+userCut :: String -> [String]
+userCut [] = []
+userCut s = x : userCut (drop 1 y) where (x,y) = span (/= ' ') s
 
 --getting verb from userInput, checking if verb is accepted, move to the right action
-actions :: String -> StateT GameState IO ()
-actions str = do
-    let verb = userCut str [0]
+actions :: AllScenes -> String -> StateT GameState IO ()
+actions s str = do
+    let v = userCut str
+    let verb = v!!0
     if verb == "help" then liftIO actionHelp
-    else if verb == "go" then actionGo (userCut str) [1]
-    else if verb == "show" then liftIO actionShow (userCut str) [1]
-    else if verb == "take" then liftIO actionTake (userCut str) [1]
-    else if verb == "use" then liftIO actionUse (userCut str) [1]
+    else if verb == "go" then actionGo (v!!1) s
+    else if verb == "show" then actionShow  (v!!1) s
+    else if verb == "take" then actionTake  (v!!1) s
+    else if verb == "use" then actionUse  (v!!1)
     else liftIO $ putStrLn "Try again"
 
-actionsLoop :: String -> StateT GameState IO ()
-actionsLoop str = do
+getUserInput :: String
+getUserInput = do
+    liftIO readLn
+
+actionsLoop :: AllScenes -> String -> StateT GameState IO ()
+actionsLoop s str = do
     --call action
-    actions str
+    actions s str
     --death check
     let deadBool = GameState.EndCheck.flagGameOver
-    if deadBool then do 
+    if deadBool then do
         ptrStrLn "You have died"
         System.Exit
     --if moving then leave function, else recursion time baybee
-    else if
-        userCut str[0] != "go" then actionsLoop readLn
+    else if do
+        (userCut str!!0) /= "go" then actionsLoop s getUserInput
     else
-        liftIO $ putstr ""
+        liftIO $ putStr ""
 
 narrativeLoop :: AllScenes -> StateT GameState IO ()
 narrativeLoop s = do
@@ -70,12 +81,12 @@ narrativeLoop s = do
     liftIO $ putStrLn (fst (s!!sceneInt))
     --read user action
     n <- liftIO readLn
-    actionsLoop n
+    actionsLoop s n
     --is user in end room
     let ending = GameState.EndCheck.isEndRoom
     if ending && GameState.EndCheck.failedEndBool
-        then liftIO $ putstr "Unfortunately you have been murdered by the bunny's mother, she has been hunting you for your entire journey."
+        then liftIO $ putStrLn "Unfortunately you have been murdered by the bunny's mother, she has been hunting you for your entire journey."
     else if ending
-        then liftIO $ putstr "Congratulations, you have escaped the Snowy Hellscape"
+        then liftIO $ putStrLn "Congratulations, you have escaped the Snowy Hellscape"
     else
-        liftIO "hello"
+        liftIO $ putStrLn "hello"
