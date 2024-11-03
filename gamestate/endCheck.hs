@@ -23,6 +23,9 @@ flagGameOver = do
     gameState <- get
     let flagDeath = flags gameState
     if "coat" `elem` flagDeath then
+        if "bunny" `elem` flagDeath then return $ length flagDeath >= 5
+        else return $ length flagDeath >= 4
+    else if "bunny" `elem` flagDeath then
         return $ length flagDeath >= 4
     else return $ length flagDeath >= 3
 
