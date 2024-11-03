@@ -6,6 +6,7 @@ import Scenes
 import Actions
 import GameState.EndCheck
 import System.Exit (exitSuccess)
+import qualified Distribution.Compat.Prelude as System
 
 {- Main Game Loop Steps:
     1. Welcome Message
@@ -40,7 +41,14 @@ actions s str = do
         "show" -> actionShow (v !! 1) s
         "take" -> actionTake (v !! 1) s
         "use"  -> actionUse (v !! 1)
-        _      -> liftIO $ putStrLn "Try again"
+        "liftIO" ->  do 
+            game <- get
+            let loc = scene game
+            if loc == 7 then do
+                liftIO $ putStrLn "you have escaped the Matrix" 
+                liftIO exitSuccess
+            else liftIO $ putStrLn "try again"
+        _      -> liftIO $ putStrLn "try again"
 
 -- Loop that processes actions and checks game state conditions
 actionsLoop :: AllScenes -> String -> StateT GameState IO ()
