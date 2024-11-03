@@ -38,6 +38,15 @@ goingWest loc scenes = do
     else if fst (scenes!!(loc - 1)) == "NULL" then loc
     else loc - 1
 
+almostDead :: [String] -> Bool
+almostDead f = do
+    if "coat" `elem` f then
+        if "bunny" `elem` f then length f >= 4
+        else length f >= 3
+    else if "bunny" `elem` f then length f >= 3
+    else length f >=2
+
+
 actionGo :: String -> AllScenes -> StateT GameState IO ()
 actionGo "north" scenes = do
     game <- get
@@ -54,15 +63,23 @@ actionGo "north" scenes = do
         liftIO $ putStrLn "awareness is key! rockfall has now stranded you, slowly starving you to death."
         put $ game {scene = newPlace, flags = ["1", "2", "3"]}
     else if place == 10 then do
-        liftIO $ putStrLn "you fell into a pit, but managed to get back out to where you were before and only took a little damage."
-        put $ game {scene = place, flags = f ++ ["fellinpit"]}
-    else if place == 13 then 
+        if almostDead f then do
+            liftIO $ putStrLn "you fell into a pit, however the combination of previous mistakes meant you couldn't survive this one."
+            put $ game {scene = place, flags = f ++ ["fellinpit"]}
+        else do
+            liftIO $ putStrLn "you fell into a pit, but managed to get back out to where you were before and only took a little damage."
+            put $ game {scene = place, flags = f ++ ["fellinpit"]}
+    else if place == 13 then
         if elem "coat" f then do
             liftIO $ putStrLn "it is very cold but luckily you wore your trusty coat and were ok"
             put $ game {scene = newPlace}
         else do
-            liftIO $ putStrLn "it is very cold so you get hypothermia, were you not warned?"
-            put $ game {scene = newPlace, flags = f ++["cold"]}
+            if almostDead f then do
+                liftIO $ putStrLn "it is very cold so you get hypothermia, combined with your previous blunders, you can't survive any longer."
+                put $ game {scene = place, flags = f ++ ["cold"]}
+            else do
+                liftIO $ putStrLn "it is very cold so you get hypothermia, were you not warned?"
+                put $ game {scene = newPlace, flags = f ++["cold"]}
     else if place == newPlace then do
         liftIO $ putStrLn "you cannot follow this path."
         put $ game {scene = newPlace}
@@ -83,19 +100,31 @@ actionGo "south" scenes = do
     else if place == 7 then do
         liftIO $ putStrLn "awareness is key! rockfall has now stranded you, slowly starving you to death."
         put $ game {scene = newPlace, flags = ["1", "2", "3"]}
-    else if place == 2 then do
-        liftIO $ putStrLn "you fell into a pit, but managed to get back out to where you were before and only took a little damage."
-        put $ game {scene = place, flags = f ++ ["fellinpit"]}
+    else if place == 2 then
+        if almostDead f then do
+            liftIO $ putStrLn "you fell into a pit, however the combination of previous mistakes meant you couldn't survive this one."
+            put $ game {scene = place, flags = f ++ ["fellinpit"]}
+        else do
+            liftIO $ putStrLn "you fell into a pit, but managed to get back out to where you were before and only took a little damage."
+            put $ game {scene = place, flags = f ++ ["fellinpit"]}
     else if place == 8 then do
-        liftIO $ putStrLn "near miss! you almost got caught in an avalanche, winding you. you managed to get back to where you were before but the dangers of the mountains must be making you anxious."
-        put $ game {scene = place, flags = f ++ ["avalanche"]}
-    else if place == 5 then 
+        if almostDead f then do
+            liftIO $ putStrLn "An avalanche came but all your previous mistakes meant you didn't have the energy to escape it."
+            put $ game {scene = place, flags = f ++ ["avalanche"]}
+        else do
+            liftIO $ putStrLn "near miss! you almost got caught in an avalanche, winding you. you managed to get back to where you were before but the dangers of the mountains must be making you anxious."
+            put $ game {scene = place, flags = f ++ ["avalanche"]}
+    else if place == 5 then
         if elem "coat" f then do
             liftIO $ putStrLn "it is very cold but luckily you wore your trusty coat and were ok"
             put $ game {scene = newPlace}
         else do
-            liftIO $ putStrLn "it is very cold so you get hypothermia, were you not warned?"
-            put $ game {scene = newPlace, flags = f ++["cold"]}
+            if almostDead f then do
+                liftIO $ putStrLn "it is very cold so you get hypothermia, combined with your previous blunders, you can't survive any longer."
+                put $ game {scene = place, flags = f ++ ["cold"]}
+            else do
+                liftIO $ putStrLn "it is very cold so you get hypothermia, were you not warned?"
+                put $ game {scene = newPlace, flags = f ++["cold"]}
     else if place == 11 then do
         liftIO $ putStrLn "illness has befallen you; you may not last very long.."
         put $ game {scene = newPlace, flags = f ++ ["illness"]}
@@ -114,18 +143,26 @@ actionGo "east" scenes = do
         liftIO $ putStrLn "awareness is key! rockfall has now stranded you, slowly starving you to death."
         put $ game {scene = newPlace, flags = ["1", "2", "3"]}
     else if place == 5 then do
-        liftIO $ putStrLn "you fell into a pit, but managed to get back out to where you were before and only took a little damage."
-        put $ game {scene = place, flags = f ++ ["fellinpit"]}
+        if almostDead f then do
+            liftIO $ putStrLn "you fell into a pit, however the combination of previous mistakes meant you couldn't survive this one."
+            put $ game {scene = place, flags = f ++ ["fellinpit"]}
+        else do
+            liftIO $ putStrLn "you fell into a pit, but managed to get back out to where you were before and only took a little damage."
+            put $ game {scene = place, flags = f ++ ["fellinpit"]}
     else if place == 14 then do
         liftIO $ putStrLn "illness has befallen you; you may not last very long.."
         put $ game {scene = newPlace, flags = f ++ ["sickness"]}
-    else if place == 8 then 
+    else if place == 8 then
         if elem "coat" f then do
             liftIO $ putStrLn "it is very cold but luckily you wore your trusty coat and were ok"
             put $ game {scene = newPlace}
         else do
-            liftIO $ putStrLn "it is very cold so you get hypothermia, were you not warned?"
-            put $ game {scene = newPlace, flags = f ++["cold"]}
+            if almostDead f then do
+                liftIO $ putStrLn "it is very cold so you get hypothermia, combined with your previous blunders, you can't survive any longer."
+                put $ game {scene = place, flags = f ++ ["cold"]}
+            else do
+                liftIO $ putStrLn "it is very cold so you get hypothermia, were you not warned?"
+                put $ game {scene = newPlace, flags = f ++["cold"]}
     else if place == newPlace then do
         liftIO $ putStrLn "you cannot follow this path."
         put $ game {scene = newPlace}
@@ -141,18 +178,30 @@ actionGo "west" scenes = do
         liftIO $ putStrLn "awareness is key! rockfall has now stranded you, slowly starving you to death."
         put $ game {scene = newPlace, flags = ["1", "2", "3"]}
     else if place == 7 then do
-        liftIO $ putStrLn "you fell into a pit, but managed to get back out to where you were before and only took a little damage."
-        put $ game {scene = place, flags = f ++ ["fellinpit"]}
+        if almostDead f then do
+            liftIO $ putStrLn "you fell into a pit, however the combination of previous mistakes meant you couldn't survive this one."
+            put $ game {scene = place, flags = f ++ ["fellinpit"]}
+        else do
+            liftIO $ putStrLn "you fell into a pit, but managed to get back out to where you were before and only took a little damage."
+            put $ game {scene = place, flags = f ++ ["fellinpit"]}
     else if place == 13 then do
-        liftIO $ putStrLn "near miss! you almost got caught in an avalanche, winding you. you managed to get back to where you were before but the dangers of the mountains must be making you anxious."
-        put $ game {scene = place, flags = f ++ ["avalanche"]}
-    else if place == 10 then 
+        if almostDead f then do
+            liftIO $ putStrLn "An avalanche came but all your previous mistakes meant you didn't have the energy to escape it."
+            put $ game {scene = place, flags = f ++ ["avalanche"]}
+        else do
+            liftIO $ putStrLn "near miss! you almost got caught in an avalanche, winding you. you managed to get back to where you were before but the dangers of the mountains must be making you anxious."
+            put $ game {scene = place, flags = f ++ ["avalanche"]}
+    else if place == 10 then
         if elem "coat" f then do
             liftIO $ putStrLn "it is very cold but luckily you wore your trusty coat and were ok"
             put $ game {scene = newPlace}
         else do
-            liftIO $ putStrLn "it is very cold so you get hypothermia, were you not warned?"
-            put $ game {scene = newPlace, flags = f ++["cold"]}
+            if almostDead f then do
+                liftIO $ putStrLn "it is very cold so you get hypothermia, combined with your previous blunders, you can't survive any longer."
+                put $ game {scene = place, flags = f ++ ["cold"]}
+            else do
+                liftIO $ putStrLn "it is very cold so you get hypothermia, were you not warned?"
+                put $ game {scene = newPlace, flags = f ++["cold"]}
     else if place == newPlace then do
         liftIO $ putStrLn "you cannot follow this path."
         put $ game {scene = newPlace}
@@ -233,11 +282,10 @@ actionUse input = do
         liftIO $ putStrLn "you do not have that item in your inventory"
     else if input == "letter" then do
         liftIO $ putStrLn "you open a heartfelt letter addressed to who you now remember is your best friends' son. he expresses his love and sorrow that he may not return home, he fears that a member of his team is after his life. you are glad to have retrieved the letter."
-        put $ game {inventory = newInv, flags = newFlags}
-    else if input == "camera" then do
+        put $ game {inventory = newInv, flags = newFlags}    else if input == "camera" then do
         liftIO $ putStrLn "the camera shows you pictures of you and another in the mountains. you both look happy. looking at these is making your head hurt, it's time to put it down."
         put $ game {inventory = newInv, flags = newFlags}
-    else if input == "matches" && "cold" `elem` initialFlags then do 
+    else if input == "matches" && "cold" `elem` initialFlags then do
         liftIO $ putStrLn "you have used the matches to warm yourself up, hypothermia has receeded."
         put $ game {inventory = newInv, flags = newFlags}
     else if input == "jerky" && "sickness" `elem` initialFlags then do
