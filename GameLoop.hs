@@ -20,7 +20,7 @@ import qualified Distribution.Compat.Prelude as System
 main :: IO ()
 main = do
     putStrLn "LOST IN THE SNOW"
-    putStrLn "Survival Adventure Game from the minds behind ___"
+    putStrLn "Survival Adventure Game from CESWEG"
     putStrLn "enter the `help` command any time"
     let initialGameState = GameState { scene = 0, flags = ["bunny"], inventory = [] }
     evalStateT (narrativeLoop Scenes.getMap) initialGameState
