@@ -217,7 +217,7 @@ flagUse :: String -> [String] -> [String]
 flagUse item flags = do
     --if user is 'cold' and uses 'matches' then remove 'cold' flag
     if item == "matches" then checkUse "cold" flags
-    else if item == "jerky" then checkUse "sickness" flags --TODO Print message 'you have eated the jerky, which has given you the energy needed to beat illness.'
+    else if item == "jerky" then checkUse "sickness" flags
     else if item == "letter" then checkUse "bunny" flags
     else if item == "coat" then putUse "coat" flags
     else flags
@@ -237,8 +237,11 @@ actionUse input = do
     else if input == "camera" then do
         liftIO $ putStrLn "the camera shows you pictures of you and another in the mountains. you both look happy. looking at these is making your head hurt, it's time to put it down."
         put $ game {inventory = newInv, flags = newFlags}
-    else if input == "matches" && "matches" `elem` initialFlags then do 
+    else if input == "matches" && "cold" `elem` initialFlags then do 
         liftIO $ putStrLn "you have used the matches to warm yourself up, hypothermia has receeded."
+        put $ game {inventory = newInv, flags = newFlags}
+    else if input == "jerky" && "sickness" `elem` initialFlags then do
+        liftIO $ putStrLn "you have used the jerky to cure your sickness, you feel much better"
         put $ game {inventory = newInv, flags = newFlags}
     else if input == "coin" || input == "ski" || input == "rope" || input == "ring" || input == "torch" || input == "flare" then do
         liftIO $ putStrLn "this item is unusable"
