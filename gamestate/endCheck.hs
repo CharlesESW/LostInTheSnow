@@ -3,43 +3,29 @@ module GameState.EndCheck where
 import Gamestate.GameState
 import Control.Monad.State
 
-{-
-
-Immediate Death ends the game
---immediate death means to add 3 flags to flaglist then trigger flagGameOver but has different end message
-3 Flags ends the game
-Reaching the end ends the game
-
-Alive end means not triggering moralGameOver
-
---need add flag function when a flag is triggered
-EXTRA--could remove flags if find and use healing supplies
--}
-
+-- Check if a specific flag (e.g., "bunny") exists in flags
 containsValue :: (Eq v) => v -> [v] -> Bool
 containsValue _ [] = False
 containsValue x (y:ys)
     | x == y = True
     | otherwise = containsValue x ys
 
---if bunny is killed, then reaching the end will kill player
---True==Failed
-failedEndBool :: State GameState Bool
+-- Check if "bunny" flag is set to indicate failed end
+failedEndBool :: StateT GameState IO Bool
 failedEndBool = do
     game <- get
     let flagDeath = flags game
     return $ containsValue "bunny" flagDeath
 
---if 3 flags are triggered then failed and end early
-flagGameOver :: State GameState Bool
+-- Check if 3 or more flags are triggered to end early
+flagGameOver :: StateT GameState IO Bool
 flagGameOver = do
     gameState <- get
     let flagDeath = flags gameState
-    if length flagDeath >=3 then return True else return False
+    return $ length flagDeath >= 3
 
---find out if end room has been reached
-isEndRoom :: State GameState Bool
+-- Check if the end room has been reached
+isEndRoom :: StateT GameState IO Bool
 isEndRoom = do
     gameState <- get
-    let lastScene = scene gameState
-    if lastScene == 16 then return True else return False
+    return $ scene gameState == 16
