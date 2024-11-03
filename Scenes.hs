@@ -32,7 +32,7 @@ getMap = [("you open your eyes to a cold white landscape, lying down with a hat 
     ("you feel a little warmer as you approach a smouldering fire, it doesn't seem like it will be much use but there's some matches beside it",["matches"]), 
     ("a harsh wind blows and you feel yourself shivering, hopefully it doesn't get any colder than this",[]), 
     ("jagged rocks surround you, threatening to skewer you with any wrong step, you had better watch your step around here",["jerky"]), 
-    ("One Before End",[]), 
+    ("you finally touch grass, and know you have almost escaped this nightmare, you just hope you don't take a wrong step now. it appears this path has been very well trodden in recent days",[]), 
     ("NULL",[]), 
     ("you wade through thick snow to get to a group of hares jumping around, there joy reminds you of something you can't quite remember",[]), 
     ("you arrive upon a snowy copse of trees, there doesn't seem to be much around but you think there might be faint carvings in the bark",[]), 
