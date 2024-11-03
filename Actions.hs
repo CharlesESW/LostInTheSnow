@@ -7,9 +7,6 @@ import Scenes
 import Control.Monad.State
 import Data.List
 
---TODO: Add flags to actions
-
--- TODO: Change Filler Text to actual help
 actionHelp :: IO ()
 actionHelp = putStrLn "--help \n\nthe aim of the game is to escape from the mountain you have found yourself upon\nthis game operates entirely in lapslock, using uppercase will not work \nthe commands are `go [nesw]`, `show [inventory/scene]`, `take [item]` and `use [item]`\n\nplease use your best survival skills to avoid flags and save yourself - remember actions do have consequences!"
 
@@ -219,7 +216,7 @@ putUse item flags = flags ++ [item]
 flagUse :: String -> [String] -> [String]
 flagUse item flags = do
     --if user is 'cold' and uses 'matches' then remove 'cold' flag
-    if item == "matches" then checkUse "cold" flags --TODO Print message 'you have used the matches to warm yourself up, hypothermia has receeded.'
+    if item == "matches" then checkUse "cold" flags
     else if item == "jerky" then checkUse "sickness" flags --TODO Print message 'you have eated the jerky, which has given you the energy needed to beat illness.'
     else if item == "letter" then checkUse "bunny" flags
     else if item == "coat" then putUse "coat" flags
@@ -236,6 +233,9 @@ actionUse input = do
         liftIO $ putStrLn "you do not have that item in your inventory"
     else if input == "letter" then do
         liftIO $ putStrLn "you open a heartfelt letter addressed to who you now remember is your best friends' son. he expresses his love and sorrow that he may not return home, he fears that a member of his team is after his life. you are glad to have retrieved the letter."
+        put $ game {inventory = newInv, flags = newFlags}
+    else if input == "matches" && "matches" `elem` initialFlags then do 
+        liftIO $ putStrLn "you have used the matches to warm yourself up, hypothermia has receeded."
         put $ game {inventory = newInv, flags = newFlags}
     else do
         liftIO $ putStrLn ("you have successfully used " ++ input)
