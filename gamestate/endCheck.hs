@@ -22,7 +22,9 @@ flagGameOver :: StateT GameState IO Bool
 flagGameOver = do
     gameState <- get
     let flagDeath = flags gameState
-    return $ length flagDeath >= 3
+    if "coat" `elem` flagDeath then
+        return $ length flagDeath >= 4
+    else return $ length flagDeath >= 3
 
 -- Check if the end room has been reached
 isEndRoom :: StateT GameState IO Bool
