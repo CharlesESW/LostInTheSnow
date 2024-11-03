@@ -184,7 +184,7 @@ actionShow :: String -> AllScenes -> StateT GameState IO ()
 actionShow input as = do
     game <- get
     if input == "inventory" then liftIO $ print (inventory game)
-    else if input == "scene" then liftIO $ print (fst (as!!scene game))
+    else if input == "scene" then liftIO $ putStrLn (fst (as!!scene game))
     else liftIO invalidAction
 
 --add to Inventory
@@ -202,7 +202,7 @@ actionTake input s = do
     else if input == "letter" && elem "set" currentInventory then liftIO invalidAction
     else if input == "set" && elem "letter" currentInventory then liftIO invalidAction
     else do
-        liftIO $ putStrLn ("You have successfully taken " ++ input)
+        liftIO $ putStrLn ("you have successfully taken " ++ input)
         put $ game {inventory = newInventory}
 
 checkUse :: String -> [String] -> [String]
@@ -240,6 +240,9 @@ actionUse input = do
     else if input == "matches" && "matches" `elem` initialFlags then do 
         liftIO $ putStrLn "you have used the matches to warm yourself up, hypothermia has receeded."
         put $ game {inventory = newInv, flags = newFlags}
+    else if input == "coin" || input == "ski" || input == "rope" || input == "ring" || input == "torch" || input == "flare" then do
+        liftIO $ putStrLn "this item is unusable"
+        put game
     else do
         liftIO $ putStrLn ("you have used " ++ input)
         put $ game {inventory = newInv, flags = newFlags}
