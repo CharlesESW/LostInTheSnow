@@ -70,7 +70,7 @@ actionGo "north" scenes = do
             liftIO $ putStrLn "you fell into a pit, but managed to get back out to where you were before and only took a little damage."
             put $ game {scene = place, flags = f ++ ["fellinpit"]}
     else if place == 13 then
-        if elem "coat" f then do
+        if "coat" `elem` f then do
             liftIO $ putStrLn "it is very cold but luckily you wore your trusty coat and were ok"
             put $ game {scene = newPlace}
         else do
@@ -115,7 +115,7 @@ actionGo "south" scenes = do
             liftIO $ putStrLn "near miss! you almost got caught in an avalanche, winding you. you managed to get back to where you were before but the dangers of the mountains must be making you anxious."
             put $ game {scene = place, flags = f ++ ["avalanche"]}
     else if place == 5 then
-        if elem "coat" f then do
+        if "coat" `elem` f then do
             liftIO $ putStrLn "it is very cold but luckily you wore your trusty coat and were ok"
             put $ game {scene = newPlace}
         else do
@@ -153,7 +153,7 @@ actionGo "east" scenes = do
         liftIO $ putStrLn "illness has befallen you; you may not last very long.."
         put $ game {scene = newPlace, flags = f ++ ["sickness"]}
     else if place == 8 then
-        if elem "coat" f then do
+        if "coat" `elem` f then do
             liftIO $ putStrLn "it is very cold but luckily you wore your trusty coat and were ok"
             put $ game {scene = newPlace}
         else do
@@ -192,7 +192,7 @@ actionGo "west" scenes = do
             liftIO $ putStrLn "near miss! you almost got caught in an avalanche, winding you. you managed to get back to where you were before but the dangers of the mountains must be making you anxious."
             put $ game {scene = place, flags = f ++ ["avalanche"]}
     else if place == 10 then
-        if elem "coat" f then do
+        if "coat" `elem` f then do
             liftIO $ putStrLn "it is very cold but luckily you wore your trusty coat and were ok"
             put $ game {scene = newPlace}
         else do
