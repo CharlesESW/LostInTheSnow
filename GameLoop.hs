@@ -1,6 +1,6 @@
 module GameLoop where
 
-import Gamestate.GameState
+import GameState.GameState
 import Control.Monad.State
 import Scenes
 import Actions

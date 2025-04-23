@@ -1,6 +1,6 @@
 module GameState.EndCheck where
 
-import Gamestate.GameState
+import GameState.GameState
 import Control.Monad.State
 
 -- Check if a specific flag (e.g., "bunny") exists in flags

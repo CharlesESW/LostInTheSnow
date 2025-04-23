@@ -1,4 +1,4 @@
-module Gamestate.GameState where
+module GameState.GameState where
 
 {-
 

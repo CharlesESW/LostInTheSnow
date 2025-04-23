@@ -2,7 +2,7 @@
 {-# HLINT ignore "Redundant if" #-}
 module Actions where
 
-import Gamestate.GameState
+import GameState.GameState
 import Scenes
 import Control.Monad.State
 import Data.List

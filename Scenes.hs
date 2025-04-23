@@ -1,5 +1,5 @@
 module Scenes where
-import Gamestate.GameState
+import GameState.GameState
 import Control.Monad.State
 
 
